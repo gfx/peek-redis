@@ -1,5 +1,5 @@
 require 'redis'
-require 'atomic'
+require 'concurrent'
 
 # Instrument Redis time
 module Peek
@@ -21,8 +21,8 @@ class Redis::Client
   class << self
     attr_accessor :query_time, :query_count
   end
-  self.query_count = Atomic.new(0)
-  self.query_time = Atomic.new(0)
+  self.query_count = ::Concurrent::AtomicFixnum.new(0)
+  self.query_time = ::Concurrent::AtomicFixnum.new(0)
 end
 
 module Peek
